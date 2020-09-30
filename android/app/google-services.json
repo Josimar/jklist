@@ -1,0 +1,64 @@
+{
+  "project_info": {
+    "project_number": "312743250992",
+    "firebase_url": "https://jklist-2020.firebaseio.com",
+    "project_id": "jklist-2020",
+    "storage_bucket": "jklist-2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312743250992:android:02cf564fda77cfaebfb1f5",
+        "android_client_info": {
+          "package_name": "jklist.josimas.com.br"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "312743250992-qfe08k1qtqp2hgprbte88rau824ipp70.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jklist.josimas.com.br",
+            "certificate_hash": "c72740ea2d8bc2c564f8305714ed0c0e056ed8b3"
+          }
+        },
+        {
+          "client_id": "312743250992-9hi40j31be182o29jep7ecfgejk44546.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jklist.josimas.com.br",
+            "certificate_hash": "cda6530de04d5b9c100c0a4b758ddcf286616ede"
+          }
+        },
+        {
+          "client_id": "312743250992-g2afp8abl8j7pvv7i5n6j5itqck67a55.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jklist.josimas.com.br",
+            "certificate_hash": "f7c185e67ecbf8253d59817b9c473cc4adc4e8d8"
+          }
+        },
+        {
+          "client_id": "312743250992-0t209ot0rvdq9qg4b1ip8q8e3d514k2o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAotsSWPUcCLrr_Cygb571jrxAKyvAPGLs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "312743250992-0t209ot0rvdq9qg4b1ip8q8e3d514k2o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

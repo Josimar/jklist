@@ -1,0 +1,10 @@
+{
+  "nomeApp": "Utilitários",
+  "listaVazia": "Nenhuma lista ainda",
+  "nenhumaLista": "Clique na opção acima para criar uma nova",
+  "pensarHome": "Pensar em uma home",
+  "utilitarios": "Utilitários",
+  "transporte": "Transporte",
+  "listaTransporte": "Lista de transportes",
+  "errorLoad": "Erro carregando os dados"
+}
