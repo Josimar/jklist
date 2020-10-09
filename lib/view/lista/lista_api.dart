@@ -11,28 +11,29 @@ class ListaApi{
 
       var _dio = new Dio();
       _dio.options.headers['Authorization'] = 'bearer ' + token;
+      _dio.options.headers["authorization"] = "token $token";
       _dio.options.contentType = 'application/json';
+      _dio.options.headers['content-Type'] = 'application/json';
+      _dio.options.headers['Accept'] = 'application/json';
 
-      var url = 'http://josimas.com.br/cakephp/api/v1/listas';
+      var url = 'http://josimas.com.br/cakephp/api/v1/listacompra';
 
-      print(url);
-
-      Map<String, String> headers = {
-        "Content-Type": "application/json",
-        "Authorization": token
-      };
       Map<String, dynamic> qParams = {
         "api_token": token
       };
 
-      var response = await _dio.get(url, queryParameters: qParams);
+      print('URL: $url');
+      print('Token: $token');
 
-      // var tagObjsJson = response.data['data'] as List;
-      // final transportes = tagObjsJson.map((tagJson) => TransporteModel.fromJson(tagJson)).toList();
+      var response = await _dio.get(url, queryParameters: qParams);
 
       var objsJson = response.data;
 
+      print('objsJson: $objsJson');
+
       ListaModelList listDados = ListaModelList.fromJson(objsJson);
+
+      print('listDados: $listDados');
 
       return listDados.listas;
     } catch (error, exception) {
@@ -47,25 +48,32 @@ class ListaApi{
       UsuarioModel userModel = await UsuarioModel.get();
       String token = userModel.token;
 
-      var url = 'http://josimas.com.br/cakephp/api/v1/listas';
+      var url = 'http://josimas.com.br/cakephp/api/v1/listacompra';
       if (lista.id != null){
         url += "/update/${lista.id}";
       }
       lista.usuarioid = userModel.id;
 
+      Map<String, dynamic> qParams = {
+        "api_token": token
+      };
+
       var _dio = new Dio();
       _dio.options.headers['Authorization'] = 'bearer ' + token;
+      _dio.options.headers["authorization"] = "token $token";
       _dio.options.contentType = 'application/json';
+      _dio.options.headers['content-Type'] = 'application/json';
+      _dio.options.headers['Accept'] = 'application/json';
 
       String json = lista.toSaveJson();
 
-      print('ListaAPI(61) => Save => json ${json}');
+//      print('ListaAPI(61) => Save => json ${json}');
 
-      var response = await _dio.post(url, data: json);
+      var response = await _dio.post(url, data: json, queryParameters: qParams);
 
       var objsJson = response.data;
 
-      print('ListaAPI(67) => Save => objsJson ${objsJson}');
+//      print('ListaAPI(67) => Save => objsJson ${objsJson}');
 
       if (response.statusCode == 200){
         ListaModel lista = ListaModel.fromJson(objsJson);
@@ -90,16 +98,23 @@ class ListaApi{
       UsuarioModel userModel = await UsuarioModel.get();
       String token = userModel.token;
 
-      var url = 'http://josimas.com.br/cakephp/api/v1/listas';
+      var url = 'http://josimas.com.br/cakephp/api/v1/listacompra';
       url += "/delete/${lista.id}";
 
       var _dio = new Dio();
       _dio.options.headers['Authorization'] = 'bearer ' + token;
+      _dio.options.headers["authorization"] = "token $token";
       _dio.options.contentType = 'application/json';
+      _dio.options.headers['content-Type'] = 'application/json';
+      _dio.options.headers['Accept'] = 'application/json';
+
+      Map<String, dynamic> qParams = {
+        "api_token": token
+      };
 
       String json = lista.toSaveJson();
 
-      var response = await _dio.post(url, data: json);
+      var response = await _dio.post(url, data: json, queryParameters: qParams);
 
       var objsJson = response.data;
 

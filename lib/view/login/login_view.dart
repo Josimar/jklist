@@ -6,11 +6,15 @@ import 'package:jklist/api/response_api.dart';
 import 'package:jklist/generated/l10n.dart';
 import 'package:jklist/home_page.dart';
 import 'package:jklist/services/firebase_service.dart';
-import 'package:jklist/utilitarios.dart';
+import 'package:jklist/utils/utilitarios.dart';
 import 'package:jklist/view/login/login_bloc.dart';
+import 'package:jklist/view/login/login_view_model.dart';
 import 'package:jklist/widget/alert.dart';
 import 'package:jklist/widget/button_custom.dart';
+import 'package:jklist/widget/carregando.dart';
+import 'package:jklist/widget/text.dart';
 import 'package:jklist/widget/textForm.dart';
+import 'package:stacked/stacked.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -58,69 +62,7 @@ class _LoginViewState extends State<LoginView> {
     _googleSignIn.signInSilently();
   }
 
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-        appBar: AppBar(
-            title: Text(DSString.of(context).utilitarios)
-        ),
-        body: _body(context)
-    );
-  }
-
-  _body(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: ListView(
-          children: <Widget>[
-            TextFormCustom('Login', 'Digite o login', controller: _txtLogin, validator: _validatorLogin, keyboardType: TextInputType.emailAddress),
-            SizedBox(height: 10),
-            TextFormCustom('Senha', 'Digite a senha', password: true, controller: _txtSenha, validator: _validatorSenha),
-            SizedBox(height: 20),
-            StreamBuilder<bool>(
-                stream: _loginBloc.stream,
-                builder: (context, snapshot) {
-                  return ButtonCustom(
-                      'Login',
-                      onPressed: () => _onClickLogin(context),
-                      showProgress: snapshot.data ?? false
-                  );
-                }
-            ),
-            Container(
-              height: 46,
-              margin: EdgeInsets.only(top: 20),
-              child: SignInButton(
-                Buttons.Google,
-                onPressed: _onClickGoogle,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _onClickLogin(BuildContext context) async {
-    if (!_formKey.currentState.validate()){
-      return;
-    }
-
-    String login = _txtLogin.text.trim();
-    String senha = _txtSenha.text.trim();
-
-    ResponseApi response = await _loginBloc.login(login, senha);
-
-    if (response.ok){
-      // UsuarioModel usuarioModel = response.result;
-      push(context, HomePage(), replace: true);
-    }else{
-      alert(context, 'Erro ao logar', response.msg);
-    }
-  }
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   String _validatorLogin(String texto){
     if (texto.isEmpty){
@@ -128,7 +70,6 @@ class _LoginViewState extends State<LoginView> {
     }
     return null;
   }
-
   String _validatorSenha(String texto){
     if (texto.isEmpty){
       return 'Digite uma senha';
@@ -139,14 +80,68 @@ class _LoginViewState extends State<LoginView> {
     return null;
   }
 
-  _onClickGoogle() async {
-    final service = FirebaseService();
-    ResponseApi response = await service.loginGoogle();
+  @override
+  Widget build(BuildContext context) {
+    return ViewModelBuilder<LoginViewModel>.reactive(
+      viewModelBuilder: () => LoginViewModel(),
+      builder: (context, model, child) => Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomPadding: false,
 
-    if (response.ok){
-      push(context, HomePage(), replace: true);
-    }else{
-      alert(context, "Erro ao logar", response.msg);
-    }
+        body: model.busy ?
+          Carregando()
+        :
+        Form(
+          key: _formKey,
+          child: Container(
+            padding: EdgeInsets.all(16),
+            child: ListView(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: 50, bottom: 100),
+                  child: Center(
+                    child: text('Acesso ao sistema', fontSize: 24, color: Theme.of(context).primaryColor),
+                  ),
+                ),
+                TextFormCustom('Login', 'Digite o login', controller: _txtLogin, validator: _validatorLogin, keyboardType: TextInputType.emailAddress),
+                SizedBox(height: 10),
+                TextFormCustom('Senha', 'Digite a senha', password: true, controller: _txtSenha, validator: _validatorSenha),
+                SizedBox(height: 20),
+                Container(
+                  height: 46,
+                  margin: EdgeInsets.only(top: 20),
+                  child: ButtonCustom(
+                      'Login',
+                      onPressed: () => model.login(login: TipoLogin.FIREBASE, email: _txtLogin.text.trim(), password: _txtSenha.text.trim()),
+                      showProgress: model.busy
+                  ),
+                ),
+                /* se precisar mudar apenas o botão ou uma área
+                StreamBuilder<bool>(
+                    stream: _loginBloc.stream,
+                    builder: (context, snapshot) {
+                      return ButtonCustom(
+                          'Login',
+                          onPressed: () => model.login(login: TipoLogin.FIREBASE, email: _txtLogin.text.trim(), password: _txtSenha.text.trim()),
+                          showProgress: model.busy
+                      );
+                    }
+                ),
+                */
+                Container(
+                  height: 46,
+                  margin: EdgeInsets.only(top: 20),
+                  child: SignInButton(
+                    Buttons.Google,
+                    onPressed: () => model.login(login: TipoLogin.GOOGLE, email: _txtLogin.text.trim(), password: _txtSenha.text.trim()),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
+      )
+    );
   }
+
 }

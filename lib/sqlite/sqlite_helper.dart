@@ -25,13 +25,13 @@ class SQLiteHelper {
     String path = join(databasesPath, 'listas.db');
     // print("db $path");
 
-    var db = await openDatabase(path, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    var db = await openDatabase(path, version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return db;
   }
 
   void _onCreate(Database db, int newVersion) async {
-    String tableListas = 'CREATE TABLE listas(id INTEGER PRIMARY KEY, nome TEXT, usuarioid INTEGER, created TEXT, updated TEXT, deleted TEXT)';
-    String tableProdutos = 'CREATE TABLE produtos(id INTEGER PRIMARY KEY, listaid INTEGER, nome TEXT)';
+    String tableListas = 'CREATE TABLE listas(id INTEGER PRIMARY KEY, titulo TEXT, descricao TEXT, usuarioid INTEGER, created TEXT, updated TEXT, deleted TEXT)';
+    String tableProdutos = 'CREATE TABLE produtos(id INTEGER PRIMARY KEY, listaid INTEGER, usuarioid INTEGER, nome TEXT, valor TEXT, Quantidade TEXT, unidade TEXT, precisao TEXT, purchased TEXT, created TEXT, updated TEXT, deleted TEXT)';
 
     await db.execute(tableListas);
     await db.execute(tableProdutos);
@@ -40,9 +40,10 @@ class SQLiteHelper {
   Future<FutureOr<void>> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print("_onUpgrade: oldVersion: $oldVersion > newVersion: $newVersion");
 
-    if(oldVersion == 1 && newVersion == 2) {
-      await db.execute("CREATE TABLE produtos(id INTEGER PRIMARY KEY, listaid INTEGER, nome TEXT)");
-    }
+    //if (oldVersion == 1 && newVersion == 2) {
+      await db.execute("DROP TABLE produtos");
+      await db.execute("DROP TABLE listas");
+    //}
   }
 
   Future close() async {

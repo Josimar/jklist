@@ -33,10 +33,10 @@ class DSString {
     return Localizations.of<DSString>(context, DSString);
   }
 
-  /// `Utilities`
+  /// `Lists`
   String get nomeApp {
     return Intl.message(
-      'Utilities',
+      'Lists',
       name: 'nomeApp',
       desc: '',
       args: [],

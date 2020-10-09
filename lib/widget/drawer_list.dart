@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jklist/generated/l10n.dart';
 import 'package:jklist/model/usuario_model.dart';
 import 'package:jklist/services/firebase_service.dart';
-import 'package:jklist/utilitarios.dart';
+import 'package:jklist/utils/utilitarios.dart';
 import 'package:jklist/view/lista/lista_view.dart';
 import 'package:jklist/view/login/login_view.dart';
 import 'package:jklist/widget/alert.dart';
@@ -32,7 +32,7 @@ class DrawerList extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward),
               onTap: (){
                 Navigator.pop(context);
-                push(context, ListaView(), replace: false);
+                push(context, ListaView(), replace: true);
               },
             ),
             ListTile(

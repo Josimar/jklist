@@ -1,9 +1,11 @@
 import 'dart:convert';
-import 'package:jklist/preferencias.dart';
+
+import 'package:jklist/utils/preferencias.dart';
 
 class UsuarioModel{
 
   String login;
+  String uid;
   String id;
   String nome;
   String email;
@@ -15,6 +17,7 @@ class UsuarioModel{
 
   UsuarioModel({
     this.id,
+    this.uid,
     this.nome,
     this.email,
     this.urlfoto,
@@ -23,6 +26,7 @@ class UsuarioModel{
 
   UsuarioModel.fromJson(Map<String, dynamic> map){
     id = map["id"].toString();
+    id = map["uid"];
     nome = map["nome"];
     email = map["email"];
     urlfoto = map["urlfoto"];
@@ -32,7 +36,7 @@ class UsuarioModel{
 
   UsuarioModel.nomeEmail(this.nome, this.email);
 
-  UsuarioModel.fromAll(this.login, this.nome, this.id, this.email, this.token, this.admin);
+  UsuarioModel.fromAll(this.login, this.nome, this.id, this.uid, this.email, this.token, this.admin);
 
   @override
   String toString() {
@@ -84,5 +88,27 @@ class UsuarioModel{
 
   static void clear() {
     Preferencias.setString("user.prefs", "");
+  }
+
+  static UsuarioModel fromData(Map<String, dynamic> data, String uId){
+    if (data == null) return null;
+
+    return UsuarioModel.fromAll(
+        data["email"], // login
+        data["nome"],
+        data["uid"], // id
+        data["uid"] == null ? uId : data["uid"],
+        data["email"],
+        data["email"], // token
+        data["email"]  // admin
+    );
+  }
+
+  Map<String, dynamic> toResumeMap(){ // toJson
+    return {
+      "email": email,
+      "nome": nome,
+      "urlfoto": urlfoto
+    };
   }
 }

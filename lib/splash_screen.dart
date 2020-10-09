@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jklist/home_page.dart';
 import 'package:jklist/model/usuario_model.dart';
 import 'package:jklist/sqlite/sqlite_helper.dart';
-import 'package:jklist/utilitarios.dart';
+import 'package:jklist/utils/utilitarios.dart';
 import 'package:jklist/view/login/login_view.dart';
 
 class SplashScreen extends StatefulWidget {

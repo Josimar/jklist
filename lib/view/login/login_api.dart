@@ -87,14 +87,14 @@ class LoginApi{
 
       String strParams = json.encode(params);
 
-      print('strParams: ${strParams}');
+      // print('strParams: ${strParams}');
 
       var response = await http.post(url, body: strParams, headers: headers);
 
       if (response.statusCode == 200) {
         Map mapResponse = json.decode(response.body);
 
-        print('mapResponse: ${mapResponse}');
+        // print('mapResponse: ${mapResponse}');
 
         final user = UsuarioModel.fromJson(mapResponse);
         user.save();
@@ -104,7 +104,7 @@ class LoginApi{
       // final user = UsuarioModel.error(json.decode(response.body));
       return ResponseApi.error(json.decode(response.body));
     }catch(error, exception){
-      print("Erro no login $error > $exception");
+      // print("Erro no login $error > $exception");
 
       // final user = UsuarioModel.error("Não foi possível fazer o login");
       return ResponseApi.error("Não foi possível fazer o login");

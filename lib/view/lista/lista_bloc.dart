@@ -1,5 +1,5 @@
 import 'package:jklist/bloc/simple_bloc.dart';
-import 'package:jklist/utilitarios.dart';
+import 'package:jklist/utils/utilitarios.dart';
 import 'package:jklist/view/lista/lista_api.dart';
 import 'package:jklist/view/lista/lista_model.dart';
 import 'package:jklist/view/lista/lista_sqlite.dart';
@@ -17,6 +17,12 @@ class ListaBloc extends SimpleBloc<List<ListaModel>>{
       }
 
       List<ListaModel> listas = await ListaApi.getLista();
+
+      if (listas == null){
+        listas = new List<ListaModel>();
+        addStream(listas);
+        return listas;
+      }
 
       // Pega os dados e atualiza ou cadastro no SQLite
       if (listas.isNotEmpty){

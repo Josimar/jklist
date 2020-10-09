@@ -19,37 +19,54 @@ class Meta {
   }
 }
 
-class ListaModel extends Entity {
+class CategoriaModel extends Entity {
   String id;
-  String titulo;
+  String uid;
+  String categoriaid;
   String descricao;
-  String usuarioid;
+  String slug;
+  String nivel;
+  String icone;
+  String hoverbackgroundcolor;
+  String backgroundcolor;
   String created;
   String updated;
   String deleted;
 
-  ListaModel({this.id, this.titulo, this.descricao, this.usuarioid});
+  CategoriaModel({this.uid, this.id, this.descricao, this.slug, this.icone});
 
-  ListaModel.fromJson(dynamic json) {
+  CategoriaModel.fromJson(dynamic json) {
     id = json['id'].toString();
-    titulo = json['titulo'];
     descricao = json['descricao'];
-    usuarioid = json['usuarioid'].toString();
+    slug = json['slug'];
+    icone = json['icone'].toString();
+  }
+
+  static CategoriaModel fromMap(Map<String, dynamic> map, String documentId) {
+    if (map == null) return null;
+
+    return CategoriaModel(
+      uid: documentId,
+      id: documentId,
+      descricao: map['descricao'],
+      slug: map['slug'],
+      icone: map['icone']
+    );
   }
 
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['titulo'] = this.titulo;
     data['descricao'] = this.descricao;
-    data['usuarioid'] = this.usuarioid;
+    data['slug'] = this.slug;
+    data['icone'] = this.icone;
     return data;
   }
 
   @override
   String toString() {
-    return '{ ${this.id}, ${this.titulo}, ${this.descricao}, ${this.usuarioid} }';
+    return '{ ${this.id}, ${this.descricao}, ${this.slug}, ${this.icone} }';
   }
 
   String toSaveJson(){
@@ -58,27 +75,27 @@ class ListaModel extends Entity {
   }
 }
 
-class ListaModelList {
+class CategoriaModelList {
   String id;
   String nome;
   Meta meta;
-  List<ListaModel> listas;
+  List<CategoriaModel> categorias;
 
-  ListaModelList(this.id, this.nome, this.meta, [this.listas]);
+  CategoriaModelList(this.id, this.nome, this.meta, [this.categorias]);
 
-  factory ListaModelList.fromJson(dynamic json) {
+  factory CategoriaModelList.fromJson(dynamic json) {
     if (json['data'] != null && json['data'].length > 0) {
       var tagObjsJson = json['data'] as List;
-      List<ListaModel> _listas = tagObjsJson.map((tagJson) => ListaModel.fromJson(tagJson)).toList();
+      List<CategoriaModel> _listas = tagObjsJson.map((tagJson) => CategoriaModel.fromJson(tagJson)).toList();
 
-      return ListaModelList(
+      return CategoriaModelList(
           json['id'] as String,
           json['nome'] as String,
           Meta.fromJson(json['meta']),
           _listas
       );
     } else {
-      return ListaModelList(
+      return CategoriaModelList(
           json['id'] as String,
           json['nome'] as String,
           Meta.fromJson(json['meta'])
@@ -88,18 +105,18 @@ class ListaModelList {
 
   @override
   String toString() {
-    return '{ ${this.id}, ${this.nome}, ${this.meta}, ${this.listas} }';
+    return '{ ${this.id}, ${this.nome}, ${this.meta}, ${this.categorias} }';
   }
 }
 
-class ListaEvent extends Event{
+class CategoriaEvent extends Event{
   // create, update, delete
   String acao;
 
-  ListaEvent(this.acao);
+  CategoriaEvent(this.acao);
 
   @override
   String toString() {
-    return 'ListaEvent{acao: $acao}';
+    return 'CategoriaEvent{acao: $acao}';
   }
 }

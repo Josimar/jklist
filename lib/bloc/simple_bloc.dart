@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class SimpleBloc<T> extends ChangeNotifier{
-  final _controller = StreamController<T>();
+  // final _controller = StreamController<T>();
+  final _controller = StreamController<T>.broadcast();
 
   Stream<T> get stream => _controller.stream;
 

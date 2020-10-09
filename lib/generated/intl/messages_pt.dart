@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "listaTransporte" : MessageLookupByLibrary.simpleMessage("Lista de transportes"),
     "listaVazia" : MessageLookupByLibrary.simpleMessage("Nenhuma lista ainda"),
     "nenhumaLista" : MessageLookupByLibrary.simpleMessage("Clique na opção acima para criar uma nova"),
-    "nomeApp" : MessageLookupByLibrary.simpleMessage("Utilitários"),
+    "nomeApp" : MessageLookupByLibrary.simpleMessage("Listas"),
     "pensarHome" : MessageLookupByLibrary.simpleMessage("Pensar em uma home"),
     "transporte" : MessageLookupByLibrary.simpleMessage("Transporte"),
     "utilitarios" : MessageLookupByLibrary.simpleMessage("Utilitários")

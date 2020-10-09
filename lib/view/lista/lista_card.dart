@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:jklist/widget/alert.dart';
 import 'package:jklist/api/response_api.dart';
 import 'package:jklist/services/event_bus.dart';
-import 'package:jklist/utilitarios.dart';
+import 'package:jklist/utils/utilitarios.dart';
 import 'package:jklist/view/lista/lista_api.dart';
 import 'package:jklist/view/lista/lista_form.dart';
 import 'package:jklist/view/lista/lista_model.dart';
-import 'package:jklist/widget/alert.dart';
+import 'package:jklist/view/produto/produto_view.dart';
+import 'package:jklist/view/categoria/categoria_model.dart';
 
 class ListaCard extends StatelessWidget {
+  final TipoVisualizacao tipoVisualizacao;
   final List<ListaModel> listas;
-  ListaCard(this.listas);
+  ListaCard(this.tipoVisualizacao, this.listas);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,18 @@ class ListaCard extends StatelessWidget {
         itemCount: listas != null ? listas.length : 0,
         itemBuilder: (context, index){
           ListaModel lista = listas[index];
+
+          if (tipoVisualizacao == TipoVisualizacao.LIST)
+            return ListTile(
+              leading: Icon(Icons.list),
+              title: Text(lista.titulo, style: TextStyle(color: Colors.black, fontSize: 18) ),
+              subtitle: Text(lista.descricao ?? '', style: TextStyle(color: Colors.black, fontSize: 14)),
+              trailing: Icon(Icons.keyboard_arrow_right),
+              onTap: (){
+                push(context, ProdutoView(lista), replace: false);
+              },
+            );
+
 
           return Card(
               elevation: 2,
@@ -32,7 +47,7 @@ class ListaCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      lista.nome,
+                      lista.titulo,
                       style: TextStyle(fontSize: 16),
                     ),
                     ButtonBar(

@@ -18,14 +18,15 @@ class ListaForm extends StatefulWidget {
 class _ListaFormState extends State<ListaForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final tNome = TextEditingController();
+  final tTitulo = TextEditingController();
+  final tDescricao = TextEditingController();
   var _showProgress = false;
 
   ListaModel get lista => widget.lista;
 
-  String _validateString(String value) {
+  String _validateTitulo(String value) {
     if (value.isEmpty) {
-      return 'Informe o campo';
+      return 'Informe o título';
     }
     return null;
   }
@@ -36,7 +37,8 @@ class _ListaFormState extends State<ListaForm> {
 
     // Copia os dados para o form
     if (lista != null) {
-      tNome.text = lista.nome;
+      tTitulo.text = lista.titulo;
+      tDescricao.text = lista.descricao;
     }
   }
 
@@ -44,7 +46,7 @@ class _ListaFormState extends State<ListaForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(lista != null ? lista.nome : "Nova lista"),
+        title: Text(lista != null ? lista.titulo : "Nova lista"),
       ),
       body: Container(
         padding: EdgeInsets.all(16),
@@ -58,7 +60,9 @@ class _ListaFormState extends State<ListaForm> {
       key: this._formKey,
       child: ListView(
         children: <Widget>[
-          TextFormCustom("Nome", "", controller: tNome, keyboardType: TextInputType.text,validator: _validateString),
+          TextFormCustom("Título", "", controller: tTitulo, keyboardType: TextInputType.text,validator: _validateTitulo),
+          Divider(),
+          TextFormCustom("Descrição", "", controller: tDescricao, keyboardType: TextInputType.text),
           Divider(),
           ButtonCustom("Salvar",onPressed: _onClickSalvar, showProgress: _showProgress),
         ],
@@ -73,15 +77,16 @@ class _ListaFormState extends State<ListaForm> {
 
     // Cria model
     var listaAtual = lista ?? ListaModel();
-    listaAtual.nome = tNome.text;
+    listaAtual.titulo = tTitulo.text;
+    listaAtual.descricao = tDescricao.text;
 
-    print("ListaForm => $listaAtual");
+    // print("ListaForm => $listaAtual");
 
     setState(() {
       _showProgress = true;
     });
 
-    print("Salvar o registro $listaAtual");
+    // print("Salvar o registro $listaAtual");
 
     // await Future.delayed(Duration(seconds: 3));
     ResponseApi<ListaModel> response = await ListaApi.save(listaAtual);
@@ -99,7 +104,5 @@ class _ListaFormState extends State<ListaForm> {
     setState(() {
       _showProgress = false;
     });
-
-    print("Fim.");
   }
 }

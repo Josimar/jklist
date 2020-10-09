@@ -10,7 +10,7 @@ class ButtonCustom extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-        color: Colors.blue,
+        color: Theme.of(context).primaryColor,
         child: showProgress ?
         Center(
             child: CircularProgressIndicator(

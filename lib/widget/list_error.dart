@@ -9,7 +9,7 @@ class ListError extends StatelessWidget {
     return Center(
       child: Text(
         message,
-        style: TextStyle(color: Colors.red, fontSize: 21),
+        style:TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor)
       ),
     );
   }
