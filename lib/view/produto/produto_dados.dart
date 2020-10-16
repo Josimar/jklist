@@ -74,6 +74,10 @@ class _ProdutoDadosState extends State<ProdutoDados> {
               double realVal = currencyToDouble(strValor);
               double qtdVal = currencyToQuantity(qtdValStr);
               double valTotal = (realVal * qtdVal);
+              if (produto.precisao == "1") {
+                valTotal = realVal;
+              }
+
               String strTotal = doubleToCurrency(valTotal);
 
               if (_itemUnit == null || _itemUnit == 'null' || _itemUnit == '' ){

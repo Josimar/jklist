@@ -26,7 +26,7 @@ class WalkthroughState extends State<Walkthrough>
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animationController = AnimationController(duration: Duration(milliseconds: 500));
     animation = Tween(begin: -250.0, end: 0.0).animate(CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
     animation.addListener(() => setState(() {}));
     animationController.forward();

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jklist/view/categoria/categoria_view_model.dart';
+import 'package:jklist/view/unidade/unidade_model.dart';
+import 'package:jklist/view/unidade/unidade_view_model.dart';
 import 'package:jklist/widget/alert.dart';
 import 'package:jklist/api/response_api.dart';
 import 'package:jklist/utils/utilitarios.dart';
@@ -24,6 +26,13 @@ class ProdutoAdd extends StatefulWidget {
 class _ProdutoAddState extends State<ProdutoAdd> {
   UsuarioModel userModel;
   List<CategoriaModel> listCategoria;
+  List<UnidadeModel> listUnidade;
+
+  UnidadeModel modelUnidadeOne;
+  CategoriaModel modelCategoriaOne;
+
+  DropdownButton<String> inputUnidade;
+  DropdownButton<String> inputCategoria;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _controllerName = TextEditingController();
@@ -34,57 +43,151 @@ class _ProdutoAddState extends State<ProdutoAdd> {
       leftSymbol: 'R\$'
   );
 
-  String _selectedCategoria = unitCategoria.keys.first;
-  String _selectedUnit;
+  String _selectedCategoria;
+  String _selectedUnidade;
   bool _isSelected = false;
   String idProduto = '';
   String _ordem = '0';
   String listaidProduto;
   String categoriaidProduto;
 
+  bool _checkDados() => true;
+  bool _carregaComboUnidade = true;
+  bool _carregaComboCategoria = true;
+
   @override
   void initState() {
     super.initState();
+    if (_checkDados()){
+      Future.delayed(Duration.zero,() {
+        final unidadeProvider = Provider.of<UnidadeViewModel>(context, listen: false);
+        final categoriaProvider = Provider.of<CategoriaViewModel>(context, listen: false);
+
+        unidadeProvider.fetchUnidade().then((value){
+          // _selectedUnidade = value.firstWhere((element) => element.id == "1").descricao;
+          _selectedUnidade = value.first.descricao;
+          /*
+          unidadeProvider.unidades.forEach((unidadeModel) {
+              _selectedUnidade = unidadeModel.descricao;
+          });
+          */
+        });
+        categoriaProvider.fetchCategoria().then((value){
+          _selectedCategoria = value.first.descricao;
+        });
+
+        listUnidade = unidadeProvider.unidades;
+        listCategoria = categoriaProvider.categorias;
+        if (listUnidade != null && listUnidade.length > 0){
+          _carregaComboUnidade = true;
+        }
+        if (listCategoria != null && listCategoria.length > 0){
+          _carregaComboCategoria = true;
+        }
+
+        // print('listCategoria_Add - build - 4');
+        // print('ListCategoria: $listCategoria');
+        // print('listUnidade_Add - build - 3');
+        // print('ListUnidade: $listUnidade');
+      });
+    }
+
+    _getThingsOnStartup().then((value){
+      getUsuario();
+    });
 
     listaidProduto = widget.lista.id;
-    // _selectedUnit = widget.categorias.length == 0 ? "" : widget.categorias[0].id;
 
     if (widget.produto != null){
       idProduto = widget.produto.id;
       _ordem = widget.produto.ordem;
       categoriaidProduto = widget.produto.categoriaid;
-
       _controllerName.text = widget.produto.nome;
       _controllerQtd.text = widget.produto.quantidade.toString();
       _controllerValor.text = widget.produto.valor;
       _isSelected = widget.produto.purchased == '1';
-
-      /*
-      widget.categorias.forEach((categoriaModel) {
-        if (precision.toString() == widget.produto.precisao){
-          _selectedUnit = name;
-        }
-      });
-      */
-
-      _selectedUnit = widget.produto.unidade;
+      _selectedUnidade = widget.produto.unidade;
     }
+  }
+
+  Future _getThingsOnStartup() async {
+    await Future.delayed(Duration(seconds: 2));
   }
 
   @override
   Widget build(BuildContext context) {
-    getUsuario();
-
-    final categoriaProvider = Provider.of<CategoriaViewModel>(context);
-    categoriaProvider.fetchCategoria();
-    listCategoria = categoriaProvider.categorias;
-    if (listCategoria == null){
-      listCategoria = new List<CategoriaModel>();
-      CategoriaModel modelCategoria = new CategoriaModel(uid:"", id:"", descricao:"Unidade", slug:"unidade", icone:"");
-      listCategoria.add(modelCategoria);
+    if ((listUnidade == null || listUnidade.length == 0) &&(modelUnidadeOne == null)) {
+      listUnidade = new List<UnidadeModel>();
+      modelUnidadeOne = new UnidadeModel(uid: "u0", id: "0", descricao: "Un", precisao: "1",slug: "un");
+      listUnidade.add(modelUnidadeOne);
+    } else if (listUnidade == null && modelUnidadeOne != null) {
+      // print('@1@');
+      listUnidade = new List<UnidadeModel>();
+      listUnidade.add(modelUnidadeOne);
+      modelUnidadeOne = null;
+      // listUnidade.clear();
+      _carregaComboUnidade = false;
     }
 
-    print('Produto_Add - build - $listCategoria');
+    if ((listCategoria == null || listCategoria.length == 0) && (modelCategoriaOne == null)) {
+      listCategoria = new List<CategoriaModel>();
+      modelCategoriaOne = new CategoriaModel(uid: "u0", id: "0", descricao: "Diversos", slug: "diversos", icone: "");
+      listCategoria.add(modelCategoriaOne);
+    } else if (listCategoria == null && modelCategoriaOne != null) {
+      // print('@2@');
+      listCategoria = new List<CategoriaModel>();
+      listCategoria.add(modelCategoriaOne);
+      modelCategoriaOne = null;
+      _carregaComboCategoria = false;
+    }
+
+    // print('Produto_Add - build - 1');
+    // print('Unidades: $listUnidade');
+    // print('Produto_Add - build - 2');
+    // print('Categorias: $listCategoria');
+    // print('modelUnidadeOne: $modelUnidadeOne');
+
+    if (_carregaComboUnidade){
+      inputUnidade = DropdownButton<String>(
+        value: _selectedUnidade,
+        onChanged: (String newValue) {
+          setState(() {
+            double valueasDouble = double.tryParse(_controllerQtd.text) ?? 0.0;
+            _controllerQtd.text = valueasDouble.toStringAsFixed(0);
+            _selectedUnidade = newValue;
+          });
+        },
+        items: listUnidade.map<DropdownMenuItem<String>>((UnidadeModel unidadeModel) {
+          // print('Produto_Add - build - 5');
+          // print('unidadeModel: $unidadeModel');
+          // print('Produto_Add - build - 6');
+          // print('unidadeModel.descricao: ${unidadeModel.descricao}');
+
+          return DropdownMenuItem<String>(
+            value: unidadeModel.descricao,
+            child: Text(unidadeModel.descricao),
+          );
+        }).toList(),
+      );
+    }
+
+    if (_carregaComboCategoria) {
+      inputCategoria = DropdownButton<String>(
+        value: _selectedCategoria,
+        onChanged: (String newValue) {
+          setState(() {
+            _selectedCategoria = newValue;
+          });
+        },
+        items: listCategoria.map<DropdownMenuItem<String>>((
+            CategoriaModel categoriaModel) {
+          return DropdownMenuItem<String>(
+            value: categoriaModel.descricao,
+            child: Text(categoriaModel.descricao),
+          );
+        }).toList(),
+      );
+    }
 
     String _labelButton = 'Salvar';
     bool _salvar = true;
@@ -155,38 +258,6 @@ class _ProdutoAddState extends State<ProdutoAdd> {
         }
     );
 
-    final inputUnit = DropdownButton<String>(
-      value: _selectedUnit,
-      onChanged: (String newValue){
-        setState(() {
-          double valueasDouble = double.tryParse(_controllerQtd.text) ?? 0.0;
-          _controllerQtd.text = valueasDouble.toStringAsFixed(0);
-          _selectedUnit = newValue;
-        });
-      },
-      items: listCategoria.map<DropdownMenuItem<String>>((CategoriaModel categoriaModel){
-        return DropdownMenuItem<String>(
-          value: categoriaModel.descricao,
-          child: Text(categoriaModel.descricao),
-        );
-      }).toList(),
-    );
-
-    final inputCategoria = DropdownButton<String>(
-      value: _selectedCategoria,
-      onChanged: (String newValue){
-        setState(() {
-          _selectedCategoria = newValue;
-        });
-      },
-      items: unitCategoria.keys.map<DropdownMenuItem<String>>((String value){
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.produto != null ? widget.produto.nome : "Novo produto"),
@@ -214,7 +285,7 @@ class _ProdutoAddState extends State<ProdutoAdd> {
                     ),
                     SizedBox(width: 8,),
                     Container(
-                        child: inputUnit, width: 100
+                        child: inputUnidade, width: 100
                     )
                   ],
                 ),
@@ -270,7 +341,7 @@ class _ProdutoAddState extends State<ProdutoAdd> {
                               ordem: _ordem,
                               valor: _controllerValor.text,
                               quantidade: _controllerQtd.text,
-                              unidade: _selectedUnit,
+                              unidade: _selectedUnidade,
                               precisao: '0',
                               categoriaid: categoriaidProduto.toString(),
                               categoria: _selectedCategoria,

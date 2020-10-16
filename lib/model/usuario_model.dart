@@ -26,7 +26,7 @@ class UsuarioModel{
 
   UsuarioModel.fromJson(Map<String, dynamic> map){
     id = map["id"].toString();
-    id = map["uid"];
+    uid = map["uid"];
     nome = map["nome"];
     email = map["email"];
     urlfoto = map["urlfoto"];

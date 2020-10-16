@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:jklist/api/response_api.dart';
 import 'package:jklist/model/usuario_model.dart';
 import 'package:jklist/view/produto/produto_model.dart';
+import 'package:jklist/core/logging/logger.dart';
 
 class ProdutoApi{
   static Future<List<ProdutoModel>> getProdutos(listaid) async {
@@ -23,19 +24,19 @@ class ProdutoApi{
         "conditions": "listaid:=:" + listaid.toString()
       };
 
-      print('URL: $url');
-      print('Token: $token');
-      print('conditions: ' + "listaid:=:" + listaid.toString());
+      // print('URL: $url');
+      // print('Token: $token');
+      // print('conditions: ' + "listaid:=:" + listaid.toString());
 
       var response = await _dio.get(url, queryParameters: qParams);
 
       var objsJson = response.data;
 
-      print('objsJson: $objsJson');
+      // print('objsJson: $objsJson');
 
       ProdutoModelList listDados = ProdutoModelList.fromJson(objsJson);
 
-      print('listDados: $listDados');
+      // print('listDados: $listDados');
 
       return listDados.produtos;
     } catch (error, exception) {
@@ -69,19 +70,19 @@ class ProdutoApi{
       }
       produto.usuarioid = userModel.id;
 
-      print('produto.id: ${produto.id}');
-      print('URL: $url');
-      print('Token: $token');
+      // print('produto.id: ${produto.id}');
+      // print('URL: $url');
+      // print('Token: $token');
 
       String json = produto.toSaveJson();
 
-      print('ListaAPI(61) => Save => json ${json}');
+      // print('ListaAPI(61) => Save => json ${json}');
 
       var response = await _dio.post(url, data: json, queryParameters: qParams);
 
       var objsJson = response.data;
 
-      print('ListaAPI(67) => Save => objsJson ${objsJson}');
+      // print('ListaAPI(67) => Save => objsJson ${objsJson}');
 
       if (response.statusCode == 200){
         ProdutoModel produto = ProdutoModel.fromJson(objsJson);
@@ -170,19 +171,19 @@ class ProdutoApi{
       var url = 'http://josimas.com.br/cakephp/api/v1/produtocompra';
       url += "/delete/${produto.id}";
 
-      print('produto.id: ${produto.id}');
-      print('URL: $url');
-      print('Token: $token');
+      // print('produto.id: ${produto.id}');
+      // print('URL: $url');
+      // print('Token: $token');
 
       String json = produto.toSaveJson();
 
-      print('ListaAPI(61) => Save => json ${json}');
+      // print('ListaAPI(61) => Save => json ${json}');
 
       var response = await _dio.post(url, data: json, queryParameters: qParams);
 
       var objsJson = response.data;
 
-      print('ListaAPI(67) => Save => objsJson ${objsJson}');
+      // print('ListaAPI(67) => Save => objsJson ${objsJson}');
 
       if (response.statusCode == 200){
         ProdutoModel trans = ProdutoModel.fromJson(objsJson);

@@ -19,38 +19,34 @@ class Meta {
   }
 }
 
-class CategoriaModel extends Entity {
+class UnidadeModel extends Entity {
   String id;
   String uid;
-  String categoriaid;
   String descricao;
+  String precisao;
   String slug;
-  String nivel;
-  String icone;
-  String hoverbackgroundcolor;
-  String backgroundcolor;
   String created;
   String updated;
   String deleted;
 
-  CategoriaModel({this.uid, this.id, this.descricao, this.slug, this.icone});
+  UnidadeModel({this.uid, this.id, this.descricao, this.precisao, this.slug});
 
-  CategoriaModel.fromJson(dynamic json) {
+  UnidadeModel.fromJson(dynamic json) {
     id = json['id'].toString();
     descricao = json['descricao'];
+    precisao = json['precisao'];
     slug = json['slug'];
-    icone = json['icone'].toString();
   }
 
-  static CategoriaModel fromMap(Map<String, dynamic> map, String documentId) {
+  static UnidadeModel fromMap(Map<String, dynamic> map, String documentId) {
     if (map == null) return null;
 
-    return CategoriaModel(
-      uid: documentId,
-      id: documentId,
-      descricao: map['descricao'],
-      slug: map['slug'],
-      icone: map['icone']
+    return UnidadeModel(
+        uid: documentId,
+        id: documentId,
+        descricao: map['descricao'],
+        precisao: map['precisao'],
+        slug: map['slug']
     );
   }
 
@@ -59,14 +55,14 @@ class CategoriaModel extends Entity {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['descricao'] = this.descricao;
+    data['precisao'] = this.precisao;
     data['slug'] = this.slug;
-    data['icone'] = this.icone;
     return data;
   }
 
   @override
   String toString() {
-    return '{ ${this.id}, ${this.descricao}, ${this.slug}, ${this.icone} }';
+    return '{ ${this.id}, ${this.uid}, ${this.descricao}, ${this.precisao}, ${this.slug} }';
   }
 
   String toSaveJson(){
@@ -75,32 +71,32 @@ class CategoriaModel extends Entity {
   }
 }
 
-class CategoriaModelList {
+class UnidadeModelList {
   String id;
   String nome;
   Meta meta;
-  List<CategoriaModel> categorias;
+  List<UnidadeModel> unidades;
 
-  CategoriaModelList(this.id, this.nome, this.meta, [this.categorias]);
+  UnidadeModelList(this.id, this.nome, this.meta, [this.unidades]);
 
-  factory CategoriaModelList.fromJson(dynamic json) {
+  factory UnidadeModelList.fromJson(dynamic json) {
 
-    // print('@ CategoriaModel @');
-    // print('json[data]');
-    // print(json['data']);
+    print('@ UnidadeModel @');
+    print('json[data]');
+    print(json['data']);
 
     if (json['data'] != null && json['data'].length > 0) {
       var tagObjsJson = json['data'] as List;
-      List<CategoriaModel> _listas = tagObjsJson.map((tagJson) => CategoriaModel.fromJson(tagJson)).toList();
+      List<UnidadeModel> _listas = tagObjsJson.map((tagJson) => UnidadeModel.fromJson(tagJson)).toList();
 
-      return CategoriaModelList(
+      return UnidadeModelList(
           json['id'] as String,
           json['nome'] as String,
           Meta.fromJson(json['meta']),
           _listas
       );
     } else {
-      return CategoriaModelList(
+      return UnidadeModelList(
           json['id'] as String,
           json['nome'] as String,
           Meta.fromJson(json['meta'])
@@ -110,18 +106,18 @@ class CategoriaModelList {
 
   @override
   String toString() {
-    return '{ ${this.id}, ${this.nome}, ${this.meta}, ${this.categorias} }';
+    return '{ ${this.id}, ${this.nome}, ${this.meta}, ${this.unidades} }';
   }
 }
 
-class CategoriaEvent extends Event{
+class UnidadeEvent extends Event{
   // create, update, delete
   String acao;
 
-  CategoriaEvent(this.acao);
+  UnidadeEvent(this.acao);
 
   @override
   String toString() {
-    return 'CategoriaEvent{acao: $acao}';
+    return 'UnidadeEvent{acao: $acao}';
   }
 }

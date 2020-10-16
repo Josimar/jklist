@@ -1,19 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:jklist/model/usuario_model.dart';
-import 'package:jklist/services/dialog_service.dart';
-import 'package:jklist/utils/dialog_manager.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:jklist/view/startup/startup_view.dart';
-import 'package:jklist/services/navigator_service.dart';
-import 'package:jklist/utils/locator.dart';
 import 'package:jklist/utils/router.dart';
+import 'package:jklist/utils/locator.dart';
 import 'package:jklist/splash_screen.dart';
 import 'package:jklist/generated/l10n.dart';
 import 'package:jklist/services/event_bus.dart';
+import 'package:jklist/model/usuario_model.dart';
+import 'package:jklist/utils/dialog_manager.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:jklist/services/dialog_service.dart';
+import 'package:jklist/view/startup/startup_view.dart';
+import 'package:jklist/services/navigator_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:jklist/view/unidade/unidade_view_model.dart';
 import 'package:jklist/view/categoria/categoria_view_model.dart';
 
 void main() async {
@@ -64,6 +65,7 @@ class PrincipalApp extends StatelessWidget {
           create: (context) => EventBus(),
           dispose: (context, bus) => bus.dispose(),
         ),
+        ChangeNotifierProvider<UnidadeViewModel>(create: (_) => UnidadeViewModel()),
         ChangeNotifierProvider<CategoriaViewModel>(create: (_) => CategoriaViewModel()),
       ],
       child: MaterialApp(

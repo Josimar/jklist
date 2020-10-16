@@ -6,6 +6,7 @@ import 'package:jklist/services/navigator_service.dart';
 import 'package:jklist/services/firebase_service.dart';
 import 'package:jklist/services/firestore_service.dart';
 
+import 'package:jklist/view/unidade/unidade_service.dart';
 import 'package:jklist/view/categoria/categoria_service.dart';
 
 GetIt locator = GetIt.instance;
@@ -16,5 +17,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => FirebaseService());
   locator.registerLazySingleton(() => FirestoreService());
 
+  locator.registerLazySingleton(() => UnidadeService());
   locator.registerLazySingleton(() => CategoriaService());
 }

@@ -85,7 +85,7 @@ Future<bool> isNetworkOn() async {
 
 double currencyToDouble(String value){
   value = value.replaceFirst('R\$', '');
-  value = value.replaceAll(RegExp(r'\.'), '');
+//  value = value.replaceAll(RegExp(r'\.'), '');
   value = value.replaceAll(RegExp(r'\,'), '.');
 
   return double.tryParse(value) ?? 0.0;

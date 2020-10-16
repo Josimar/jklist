@@ -18,14 +18,27 @@ class CategoriaViewModel extends BaseModel {
   Future<List<CategoriaModel>> fetchCategoria() async {
     var result = await _categoriaService.getCategoria();
 
-    if (result == null || result.documents == null){
+    // print('@ CategoriaViewModel @');
+    // print('result');
+    // print(result);
+
+    if (result == null){
       _categorias = new List<CategoriaModel>();
       return _categorias;
     }
 
-    _categorias = result.documents
-        .map((doc) => CategoriaModel.fromMap(doc.data, doc.documentID))
-        .toList();
+    /* retorno da API */
+    if (result is List<CategoriaModel>){
+      _categorias = result;
+    }else{
+      if (result.documents == null){
+        _categorias = new List<CategoriaModel>();
+        return _categorias;
+      }
+      _categorias = result.documents
+          .map((doc) => CategoriaModel.fromMap(doc.data, doc.documentID))
+          .toList();
+    }
 
     if (_categorias == null){
       _categorias = new List<CategoriaModel>();

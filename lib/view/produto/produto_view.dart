@@ -246,9 +246,28 @@ class _ProdutoViewState extends State<ProdutoView> with AutomaticKeepAliveClient
                             String qtdValStr = item.quantidade ?? 0;
                             bool isChecked = item.purchased == '1';
 
+                            // print(strValor);
+
                             double realVal = currencyToDouble(strValor);
                             double qtdVal = currencyToQuantity(qtdValStr);
+
+                            // print(realVal);
+                            // print(qtdVal);
+
+                            // print('item.precisao');
+                            // print(item.precisao);
+                            // print('item.precisao == "1"');
+                            // print(item.precisao == "1");
+
                             double valTotal = (realVal * qtdVal);
+                            if (item.precisao == "1") {
+                              valTotal = realVal;
+                            }
+
+                            // print('valTotal');
+                            // print(valTotal);
+
+                            // print(valTotal);
 
                             subTotal += valTotal;
 

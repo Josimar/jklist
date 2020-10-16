@@ -22,18 +22,18 @@ class ListaApi{
         "api_token": token
       };
 
-      print('URL: $url');
-      print('Token: $token');
+      // print('URL: $url');
+      // print('Token: $token');
 
       var response = await _dio.get(url, queryParameters: qParams);
 
       var objsJson = response.data;
 
-      print('objsJson: $objsJson');
+      // print('objsJson: $objsJson');
 
       ListaModelList listDados = ListaModelList.fromJson(objsJson);
 
-      print('listDados: $listDados');
+      // print('listDados: $listDados');
 
       return listDados.listas;
     } catch (error, exception) {
