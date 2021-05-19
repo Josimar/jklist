@@ -1,27 +1,35 @@
+import 'package:jklist/api/response_api.dart';
 import 'package:jklist/bloc/simple_bloc.dart';
 import 'package:jklist/utils/utilitarios.dart';
 import 'package:jklist/view/lista/lista_api.dart';
 import 'package:jklist/view/lista/lista_model.dart';
 import 'package:jklist/view/lista/lista_sqlite.dart';
 
-class ListaBloc extends SimpleBloc<List<ListaModel>>{
+class ListaBloc extends SimpleBloc<ListaModelList>{
 
-  Future<List<ListaModel>> loadLista() async {
+  Future<ListaModelList> loadLista() async {
+    ListaModelList listaModelList = new ListaModelList.newDefault('OK', '200');
+
     try{
-
       bool networkOn = await isNetworkOn();
+
       if (! networkOn){
         List<ListaModel> listas = await ListaSQLite().findAllByTipo(null);
-        addStream(listas);
-        return listas;
+        listaModelList.listas = listas;
+        addStream(listaModelList);
+        return listaModelList;
       }
 
-      List<ListaModel> listas = await ListaApi.getLista();
+      ResponseApi<ListaModelList> listasAPI = await ListaApi.getLista();
+      var listas = listasAPI.result.listas;
 
-      if (listas == null){
+      if (!listasAPI.ok || listas == null){
         listas = new List<ListaModel>();
-        addStream(listas);
-        return listas;
+        listaModelList.id = 'Erro';
+        listaModelList.nome = '401';
+        listaModelList.listas = listas;
+        addStream(listaModelList);
+        return listaModelList;
       }
 
       // Pega os dados e atualiza ou cadastro no SQLite
@@ -32,13 +40,16 @@ class ListaBloc extends SimpleBloc<List<ListaModel>>{
         }
       }
 
-      addStream(listas);
-      return listas;
+      listaModelList.listas = listas;
+      addStream(listaModelList);
+      return listaModelList;
     }catch(error){
+      listaModelList.id = 'Erro';
+      listaModelList.nome = '401';
       addError(error);
     }
 
-    return new List<ListaModel>();
+    return listaModelList;
   }
 
 }

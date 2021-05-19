@@ -9,6 +9,7 @@ import 'package:jklist/view/lista/lista_bloc.dart';
 import 'package:jklist/view/lista/lista_card.dart';
 import 'package:jklist/view/lista/lista_form.dart';
 import 'package:jklist/view/lista/lista_model.dart';
+import 'package:jklist/view/login/login_view.dart';
 import 'package:jklist/widget/carregando.dart';
 import 'package:jklist/widget/drawer_list.dart';
 import 'package:jklist/widget/list_error.dart';
@@ -21,6 +22,7 @@ class ListaView extends StatefulWidget {
 class _ListaViewState extends State<ListaView> with AutomaticKeepAliveClientMixin<ListaView>{
 
   final _listaBloc = ListaBloc();
+  bool _voltaLogin = false;
 
   StreamSubscription<Event> subscription;
 
@@ -55,6 +57,10 @@ class _ListaViewState extends State<ListaView> with AutomaticKeepAliveClientMixi
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    if (_voltaLogin){
+      push(context, LoginView(), replace: true);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -156,7 +162,17 @@ class _ListaViewState extends State<ListaView> with AutomaticKeepAliveClientMixi
               if (snapshot.hasError){
                 return ListError('Não foi possível carregar os dados');
               }else{
-                List<ListaModel> listas = snapshot.data;
+                ListaModelList listaModel = snapshot.data;
+                List<ListaModel> listas = listaModel.listas;
+
+                if (listaModel.id == 'Erro' && listaModel.nome == '401'){
+                  push(context, ListaView(), replace: true);
+                  // return ListTile(
+                  //   leading: Icon(Icons.error),
+                  //   title: Text(DSStringLocal.deslogarDados),
+                  //   trailing: Icon(Icons.exit_to_app),
+                  // );
+                }
 
                 if (listas.length == 0){
                   // return ListError(DSStringLocal.emptyDados);

@@ -4,7 +4,7 @@ import 'package:jklist/model/usuario_model.dart';
 import 'package:jklist/view/lista/lista_model.dart';
 
 class ListaApi{
-  static Future<List<ListaModel>> getLista() async {
+  static Future<ResponseApi<ListaModelList>> getLista() async {
     try {
       UsuarioModel userModel = await UsuarioModel.get();
       String token = userModel.token;
@@ -35,11 +35,16 @@ class ListaApi{
 
       // print('listDados: $listDados');
 
-      return listDados.listas;
+      // return ResponseApi.ok(listDados.listas);
+      return ResponseApi.ok(listDados);
     } catch (error, exception) {
+      String strError = error.toString();
+      if (strError.indexOf('401') > 0){
+        ResponseApi.error("Login");
+      }
       print("Erro no login $error > $exception");
 
-      // return ResponseApi.error("Não foi possível fazer o login");
+      return ResponseApi.error("Não foi possível fazer o login");
     }
   }
 

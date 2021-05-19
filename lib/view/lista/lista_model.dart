@@ -64,6 +64,8 @@ class ListaModelList {
   Meta meta;
   List<ListaModel> listas;
 
+  ListaModelList.newDefault(this.id, this.nome, [this.listas]);
+
   ListaModelList(this.id, this.nome, this.meta, [this.listas]);
 
   factory ListaModelList.fromJson(dynamic json) {

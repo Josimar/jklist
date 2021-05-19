@@ -194,6 +194,7 @@ class DSStringLocal{
 
   static const String carregando = "Carregando...";
   static const String emptyDados = "Nenhum registro encontrado...";
+  static const String deslogarDados = "Favor clicar em sair e logar novamente";
   static const String error = "Erro encontrado, favor tentar depois";
   static const String editar = "Editar";
   static const String delete = "Delete";
